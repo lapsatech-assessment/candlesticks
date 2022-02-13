@@ -33,8 +33,8 @@ class CandlestickGeneratorInstanceVerticleIT extends VertxAwareSpecification {
       EventBusAccess.instance().publishPrice(isin, Price.of(10d)).onComplete(priceSentPromise)
       EventBusAccess.instance().registerCandlestickEventStub { candlestickEvent -> candlestickEventPromise.tryComplete(candlestickEvent) }
     }
-    def deploymentId = waitValue(deploymentIdPromise, 100)
-    waitComplete(priceSentPromise, 100)
+    def deploymentId = waitValue(deploymentIdPromise, 1000)
+    waitComplete(priceSentPromise, 1000)
     def candlestickEvent = waitValue(candlestickEventPromise, 1000)
 
     then:

@@ -22,7 +22,7 @@ public class QuoteEventHandlerImpl implements QuoteEventHandler {
   @Override
   public void handle(QuoteEvent event) {
     Quote qe = event.getData();
-    eventBusAccess.publishPrice(qe.getIsin(), qe.getPrice().getValue());
+    eventBusAccess.publishPrice(qe.getIsin(), qe.getPrice());
   }
 
 }

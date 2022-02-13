@@ -1,7 +1,6 @@
 package org.candlesticks.model;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 import org.candlesticks.model.jackson.PriceDeserializer;
 import org.candlesticks.model.jackson.PriceSerializer;
@@ -14,28 +13,28 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 public class Price implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  public static Price of(Double value) {
+  public static Price of(double value) {
     return new Price(value);
   }
 
-  private final Double value;
+  private final double value;
 
-  private Price(Double value) {
+  private Price(double value) {
     this.value = value;
   }
 
-  public Double getValue() {
+  public double getValue() {
     return value;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(value);
+    return Double.hashCode(value);
   }
 
   @Override
   public String toString() {
-    return "" + value;
+    return Double.toString(value);
   }
 
   @Override
@@ -47,6 +46,7 @@ public class Price implements Serializable {
     if (getClass() != obj.getClass())
       return false;
     Price other = (Price) obj;
-    return Objects.equals(value, other.value);
+    return Double.doubleToLongBits(value) == Double.doubleToLongBits(other.value);
   }
+
 }

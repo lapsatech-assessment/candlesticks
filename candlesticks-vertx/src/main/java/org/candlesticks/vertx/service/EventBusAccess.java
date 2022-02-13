@@ -4,6 +4,7 @@ import org.candlesticks.model.CandlestickEvent;
 import org.candlesticks.model.InstrumentEvent;
 import org.candlesticks.model.InstrumentEventResponse;
 import org.candlesticks.model.Isin;
+import org.candlesticks.model.Price;
 import org.candlesticks.model.Quote;
 import org.candlesticks.model.QuoteEvent;
 import org.candlesticks.vertx.service.impl.EventBusAccessImpl;
@@ -18,13 +19,12 @@ public interface EventBusAccess {
     return EventBusAccessImpl.LAZY_DEFAULT_INSTANCE.get();
   }
 
-  Future<Void> registerPriceStub(Isin isin, Handler<Double> handler);
+  Future<Void> registerPriceStub(Isin isin, Handler<Price> handler);
 
-  Future<Void> publishPrice(Isin isin, Double price);
+  Future<Void> publishPrice(Isin isin, Price price);
 
   default Future<Void> publishPrice(Quote quote) {
-    return publishPrice(quote.getIsin(), quote.getPrice().getValue());
-
+    return publishPrice(quote.getIsin(), quote.getPrice());
   }
 
   //

@@ -1,7 +1,5 @@
 package org.candlesticks.core;
 
-import static java.util.Objects.requireNonNull;
-
 public class CandlestickValues {
 
   private static final CandlestickValues EMPTY = new CandlestickValues();
@@ -10,38 +8,37 @@ public class CandlestickValues {
     return EMPTY;
   }
 
-  public static CandlestickValues of(Double openPrice, Double highPrice, Double lowPrice, Double closingPrice,
+  public static CandlestickValues of(double openPrice, double highPrice, double lowPrice, double closingPrice,
       long amount) {
     return new CandlestickValues(openPrice, highPrice, lowPrice, closingPrice, amount);
   }
 
   private final boolean empty;
-  private final Double openPrice;
-  private final Double highPrice;
-  private final Double lowPrice;
-  private final Double closingPrice;
+  private final double openPrice;
+  private final double highPrice;
+  private final double lowPrice;
+  private final double closingPrice;
   private final long amount;
 
-  private CandlestickValues(Double openPrice, Double highPrice, Double lowPrice, Double closingPrice, long amount) {
+  private CandlestickValues(double openPrice, double highPrice, double lowPrice, double closingPrice, long amount) {
     this.empty = false;
-    this.openPrice = requireNonNull(openPrice, "openPrice");
-    this.highPrice = requireNonNull(highPrice, "highPrice");
-    this.lowPrice = requireNonNull(lowPrice, "lowPrice");
-    this.closingPrice = requireNonNull(closingPrice, "closingPrice");
+    this.openPrice = openPrice;
+    this.highPrice = highPrice;
+    this.lowPrice = lowPrice;
+    this.closingPrice = closingPrice;
     this.amount = amount;
   }
 
   private CandlestickValues() {
     this.empty = true;
-    this.openPrice = null;
-    this.highPrice = null;
-    this.lowPrice = null;
-    this.closingPrice = null;
+    this.openPrice = 0;
+    this.highPrice = 0;
+    this.lowPrice = 0;
+    this.closingPrice = 0;
     this.amount = 0;
   }
 
-  public CandlestickValues acceptPrice(Double priceValue) {
-    requireNonNull(priceValue, "priceValue");
+  public CandlestickValues acceptPrice(double priceValue) {
     return new CandlestickValues(
         empty ? priceValue : openPrice,
         empty || highPrice < priceValue ? priceValue : highPrice,
@@ -54,19 +51,19 @@ public class CandlestickValues {
     return empty;
   }
 
-  public Double getOpenPrice() {
+  public double getOpenPrice() {
     return openPrice;
   }
 
-  public Double getHighPrice() {
+  public double getHighPrice() {
     return highPrice;
   }
 
-  public Double getLowPrice() {
+  public double getLowPrice() {
     return lowPrice;
   }
 
-  public Double getClosingPrice() {
+  public double getClosingPrice() {
     return closingPrice;
   }
 

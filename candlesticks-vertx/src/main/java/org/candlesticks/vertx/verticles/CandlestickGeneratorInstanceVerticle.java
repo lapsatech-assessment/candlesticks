@@ -37,7 +37,7 @@ public class CandlestickGeneratorInstanceVerticle extends AbstractVerticle {
     final CandlestickGenerator generator = new CandlestickGenerator(length, isin,
         eventBusAccess::publishCandlestickEvent);
 
-    eventBusAccess.registerPriceStub(isin, price -> generator.tick(price));
+    eventBusAccess.registerPriceStub(isin, price -> generator.tick(price.getValue()));
 
     vertx.setPeriodic(generator.getTickerDelayMilis(), timerId -> generator.tick());
 

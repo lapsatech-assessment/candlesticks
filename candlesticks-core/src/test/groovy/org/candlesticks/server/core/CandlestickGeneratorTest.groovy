@@ -46,10 +46,10 @@ class CandlestickGeneratorTest extends Specification {
       Candlestick candlestick = event.candlestick
       candlestick.openTimestamp == Instant.parse('2022-02-01T04:00:00Z')
       candlestick.closeTimestamp == Instant.parse('2022-02-01T04:01:00Z')
-      candlestick.highPrice.value == 20d
-      candlestick.lowPrice.value == 11d
-      candlestick.openPrice.value == 11d
-      candlestick.closingPrice.value == 15d
+      candlestick.highPrice == Price.of(20d)
+      candlestick.lowPrice == Price.of(11d)
+      candlestick.openPrice == Price.of(11d)
+      candlestick.closingPrice == Price.of(15d)
       candlestick.amount == 3
     })
 
@@ -77,10 +77,10 @@ class CandlestickGeneratorTest extends Specification {
       Candlestick candlestick = event.candlestick
       candlestick.openTimestamp == Instant.parse('2022-02-01T04:02:00Z')
       candlestick.closeTimestamp == Instant.parse('2022-02-01T04:03:00Z')
-      candlestick.highPrice.value == 55d
-      candlestick.lowPrice.value == 55d
-      candlestick.openPrice.value == 55d
-      candlestick.closingPrice.value == 55d
+      candlestick.highPrice == Price.of(55d)
+      candlestick.lowPrice == Price.of(55d)
+      candlestick.openPrice == Price.of(55d)
+      candlestick.closingPrice == Price.of(55d)
       candlestick.amount == 1
     })
 
@@ -89,10 +89,10 @@ class CandlestickGeneratorTest extends Specification {
       Candlestick candlestick = event.candlestick
       candlestick.openTimestamp == Instant.parse('2022-02-01T04:03:00Z')
       candlestick.closeTimestamp == Instant.parse('2022-02-01T04:04:00Z')
-      candlestick.highPrice.value == null
-      candlestick.lowPrice.value == null
-      candlestick.openPrice.value == null
-      candlestick.closingPrice.value == null
+      candlestick.highPrice == null
+      candlestick.lowPrice == null
+      candlestick.openPrice == null
+      candlestick.closingPrice == null
       candlestick.amount == 0
     })
 
@@ -101,10 +101,10 @@ class CandlestickGeneratorTest extends Specification {
       Candlestick candlestick = event.candlestick
       candlestick.openTimestamp == Instant.parse('2022-02-01T04:04:00Z')
       candlestick.closeTimestamp == Instant.parse('2022-02-01T04:05:00Z')
-      candlestick.highPrice.value == null
-      candlestick.lowPrice.value == null
-      candlestick.openPrice.value == null
-      candlestick.closingPrice.value == null
+      candlestick.highPrice == null
+      candlestick.lowPrice == null
+      candlestick.openPrice == null
+      candlestick.closingPrice == null
       candlestick.amount == 0
     })
     0 * handler.accept(_)

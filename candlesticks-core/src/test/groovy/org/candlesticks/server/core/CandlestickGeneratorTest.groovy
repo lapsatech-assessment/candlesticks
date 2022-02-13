@@ -61,12 +61,14 @@ class CandlestickGeneratorTest extends Specification {
       Candlestick candlestick = event.candlestick
       candlestick.openTimestamp == Instant.parse('2022-02-01T04:01:00Z')
       candlestick.closeTimestamp == Instant.parse('2022-02-01T04:02:00Z')
-      candlestick.highPrice.value == 1d
-      candlestick.lowPrice.value == 1d
-      candlestick.openPrice.value == 1d
-      candlestick.closingPrice.value == 1d
+      candlestick.highPrice== Price.of(1d)
+      candlestick.lowPrice == Price.of(1d)
+      candlestick.openPrice == Price.of(1d)
+      candlestick.closingPrice == Price.of(1d)
       candlestick.amount == 1
     })
+
+    then:
     0 * handler.accept(_)
 
     when:
@@ -107,6 +109,8 @@ class CandlestickGeneratorTest extends Specification {
       candlestick.closingPrice == null
       candlestick.amount == 0
     })
+
+    then:
     0 * handler.accept(_)
   }
 }

@@ -115,8 +115,8 @@ public class CandlestickGenerator {
         }
         if (catchPrice) {
           vvv = vvv.acceptPrice(price);
-          this.values = vvv;
         }
+        this.values = vvv;
       } finally {
         lock.unlock();
       }

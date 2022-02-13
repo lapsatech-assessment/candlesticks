@@ -9,6 +9,7 @@ import org.candlesticks.model.CandlestickEvent
 import org.candlesticks.model.InstrumentEvent
 import org.candlesticks.model.InstrumentEventResponse
 import org.candlesticks.model.Isin
+import org.candlesticks.model.Price
 import org.candlesticks.model.Quote
 import org.candlesticks.model.QuoteEvent
 import org.candlesticks.vertx.service.EventBusServiceTransport
@@ -39,7 +40,7 @@ class EventBusAccessImplTest extends Specification {
     noExceptionThrown()
 
     and:
-    1 * transport.registerStub('base/service/price/ABC123', Double, stub) >> Future.succeededFuture()
+    1 * transport.registerStub('base/service/price/ABC123', Price, stub) >> Future.succeededFuture()
   }
 
   def 'test publishPrice'() {
@@ -50,7 +51,7 @@ class EventBusAccessImplTest extends Specification {
     def service = new EventBusAccessImpl('base', '/', transport)
 
     def isin = Isin.of('ABC123')
-    def price = 123d
+    def price = Price.of(123d)
 
     when:
     def future = service.publishPrice(isin, price)

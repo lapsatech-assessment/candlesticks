@@ -22,6 +22,6 @@ class QuoteEventHandlerImplTest extends Specification {
     noExceptionThrown()
 
     and:
-    1 * eventBusAccess.publishPrice(Isin.of('ABC123'), 10d)
+    1 * eventBusAccess.publishPrice(Isin.of('ABC123'), Price.of(10d))
   }
 }

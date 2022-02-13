@@ -6,32 +6,6 @@ import spock.lang.Specification
 
 class CandlestickValuesTest extends Specification {
 
-  def 'test wrong args'() {
-    when:
-    CandlestickValues.of(1d, 2d, 3d, null, 0)
-
-    then:
-    thrown(NullPointerException)
-
-    when:
-    CandlestickValues.of(1d, 2d, null, 4d, 0)
-
-    then:
-    thrown(NullPointerException)
-
-    when:
-    CandlestickValues.of(1, null, 3d, 4d, 0)
-
-    then:
-    thrown(NullPointerException)
-
-    when:
-    CandlestickValues.of(null, 2d, 3d, 4d, 0)
-
-    then:
-    thrown(NullPointerException)
-  }
-
   def 'test general operations'() {
 
     when:
@@ -39,10 +13,10 @@ class CandlestickValuesTest extends Specification {
 
     then:
     values.empty
-    values.openPrice == null
-    values.closingPrice  == null
-    values.highPrice == null
-    values.lowPrice  == null
+    values.openPrice == 0
+    values.closingPrice  == 0
+    values.highPrice == 0
+    values.lowPrice  == 0
     values.amount == 0
 
     when:

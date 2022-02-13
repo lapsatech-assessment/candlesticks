@@ -12,10 +12,10 @@ public class PriceSerializer extends JsonSerializer<Price> {
 
   @Override
   public void serialize(Price value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
-    if (value == null || value.getValue() == null) {
+    if (value == null) {
       gen.writeNull();
     } else {
-      gen.writeNumber(value.getValue().doubleValue());
+      gen.writeNumber(value.getValue());
     }
   }
 

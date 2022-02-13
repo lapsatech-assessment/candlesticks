@@ -44,12 +44,12 @@ public class CandlestickGenerator {
         requireNonNull(length, "length").getValue());
   }
 
-  public void tick(Double price) {
+  public void tick(double price) {
     tick(Instant.now(), price);
   }
 
   public void tick() {
-    tick(Instant.now(), null);
+    tick(Instant.now(), 0, false);
   }
 
   public long getTickerDelayMilis() {
@@ -61,28 +61,45 @@ public class CandlestickGenerator {
       Length length,
       CandlestickValues values,
       CandlestickPeriod period) {
-    Candlestick candlestick = new Candlestick(
-        period.getFromInclusive(),
-        period.getToExclusive(),
-        Price.of(values.getOpenPrice()),
-        Price.of(values.getHighPrice()),
-        Price.of(values.getLowPrice()),
-        Price.of(values.getClosingPrice()),
-        values.getAmount());
+
+    final Candlestick candlestick;
+    if (values.isEmpty()) {
+      candlestick = new Candlestick(
+          period.getFromInclusive(),
+          period.getToExclusive(),
+          null,
+          null,
+          null,
+          null,
+          0);
+    } else {
+      candlestick = new Candlestick(
+          period.getFromInclusive(),
+          period.getToExclusive(),
+          Price.of(values.getOpenPrice()),
+          Price.of(values.getHighPrice()),
+          Price.of(values.getLowPrice()),
+          Price.of(values.getClosingPrice()),
+          values.getAmount());
+    }
     return new CandlestickEvent(candlestick, isin, length);
   }
 
   /*
-   * used int tests
+   * used in tests
    */
-  private void tick(final Instant now, final Double price) {
+  void tick(final Instant now, final double price) {
+    tick(now, price, true);
+  }
+
+  void tick(final Instant now, final double price, final boolean catchPrice) {
     CandlestickPeriod pp = this.period;
 
     if (pp.isBefore(now)) {
       throw new IllegalStateException("Past value");
     }
 
-    if (price != null || pp.isFuture(now)) {
+    if (catchPrice || pp.isFuture(now)) {
       lock.lock();
       try {
         CandlestickPeriod ppp = this.period;
@@ -96,10 +113,10 @@ public class CandlestickGenerator {
           }
           this.period = ppp;
         }
-        if (price != null) {
+        if (catchPrice) {
           vvv = vvv.acceptPrice(price);
+          this.values = vvv;
         }
-        this.values = vvv;
       } finally {
         lock.unlock();
       }

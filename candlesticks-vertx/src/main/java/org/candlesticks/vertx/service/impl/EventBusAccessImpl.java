@@ -8,6 +8,7 @@ import org.candlesticks.model.CandlestickEvent;
 import org.candlesticks.model.InstrumentEvent;
 import org.candlesticks.model.InstrumentEventResponse;
 import org.candlesticks.model.Isin;
+import org.candlesticks.model.Price;
 import org.candlesticks.model.QuoteEvent;
 import org.candlesticks.vertx.service.EventBusAccess;
 import org.candlesticks.vertx.service.EventBusServiceTransport;
@@ -46,12 +47,12 @@ public class EventBusAccessImpl implements EventBusAccess {
   }
 
   @Override
-  public Future<Void> registerPriceStub(Isin isin, Handler<Double> handler) {
-    return eventBusTransport.registerStub(createPriceAddress(isin), Double.class, handler);
+  public Future<Void> registerPriceStub(Isin isin, Handler<Price> handler) {
+    return eventBusTransport.registerStub(createPriceAddress(isin), Price.class, handler);
   }
 
   @Override
-  public Future<Void> publishPrice(Isin isin, Double price) {
+  public Future<Void> publishPrice(Isin isin, Price price) {
     return eventBusTransport.publish(createPriceAddress(isin), price);
   }
 

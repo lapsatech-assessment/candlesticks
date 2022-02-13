@@ -9,6 +9,7 @@ import java.time.Duration
 import org.candlesticks.model.CandlestickEvent
 import org.candlesticks.model.Isin
 import org.candlesticks.model.Length
+import org.candlesticks.model.Price
 import org.candlesticks.vertx.service.EventBusAccess
 
 import io.vertx.core.Promise
@@ -29,7 +30,7 @@ class CandlestickGeneratorInstanceVerticleIT extends VertxAwareSpecification {
       vertx.deployVerticle(new CandlestickGeneratorInstanceVerticle(isin, length))
           .onComplete(deploymentIdPromise)
 
-      EventBusAccess.instance().publishPrice(isin, 10d).onComplete(priceSentPromise)
+      EventBusAccess.instance().publishPrice(isin, Price.of(10d)).onComplete(priceSentPromise)
       EventBusAccess.instance().registerCandlestickEventStub { candlestickEvent -> candlestickEventPromise.tryComplete(candlestickEvent) }
     }
     def deploymentId = waitValue(deploymentIdPromise, 100)

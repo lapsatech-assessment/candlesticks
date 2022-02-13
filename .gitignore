@@ -1,0 +1,13 @@
+.gradle/
+.idea/
+build/
+
+.DS_Store
+
+# eclipse IDE stuff
+.project
+.classpath
+.settings
+
+# Maven
+target

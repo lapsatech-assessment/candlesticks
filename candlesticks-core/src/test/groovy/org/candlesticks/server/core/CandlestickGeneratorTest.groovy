@@ -15,7 +15,7 @@ import spock.lang.Specification
 
 class CandlestickGeneratorTest extends Specification {
 
-  def 'test that values are rbeing reset on next candlesttick'() {
+  def 'test that values are being reset when candlestick created'() {
     given:
     def handler = Mock(Consumer) as Consumer<Candlestick>
     def results = []

@@ -66,7 +66,7 @@ curl --location --request POST 'http://localhost:9090/api/instrument' \
 }'
 ```
 
-#### Example of cchecking instrument status and the list of candlestick periods available
+#### Example of how to check current instrument streaming status
 ```
 curl --location --request POST 'http://localhost:9090/api/instrument' \
 --header 'Content-Type: application/json' \
@@ -79,7 +79,7 @@ curl --location --request POST 'http://localhost:9090/api/instrument' \
 }'
 ```
 
-#### Rest endpoint for candlesticks
+#### Rest endpoint for getting candlesticks
 
 Example equest for gettting EURUSD candlesticks 1 min long (default value)
 ```

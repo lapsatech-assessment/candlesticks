@@ -92,7 +92,11 @@ public class CandlestickGenerator {
     tick(now, price, true);
   }
 
-  void tick(final Instant now, final double price, final boolean catchPrice) {
+  void tick(final Instant now) {
+    tick(now, 0, false);
+  }
+
+  private void tick(final Instant now, final double price, final boolean catchPrice) {
     CandlestickPeriod pp = this.period;
 
     if (pp.isBefore(now)) {

@@ -15,6 +15,47 @@ import spock.lang.Specification
 
 class CandlestickGeneratorTest extends Specification {
 
+  def 'test that values are rbeing reset on next candlesttick'() {
+    given:
+    def handler = Mock(Consumer) as Consumer<Candlestick>
+    def results = []
+    handler.accept(_) >> { results << it[0].candlestick }
+    def p = new CandlestickGenerator(Instant.parse('2022-02-01T04:00:00Z'), Length.of(Duration.ofMinutes(1)), Isin.of("ABC123"), handler)
+
+    when:
+    p.tick(Instant.parse('2022-02-01T04:00:10Z'), 10d)
+    p.tick(Instant.parse('2022-02-01T04:00:30Z'), 30d)
+    p.tick(Instant.parse('2022-02-01T04:00:50Z'), 50d)
+    p.tick(Instant.parse('2022-02-01T04:01:10Z'))
+    p.tick(Instant.parse('2022-02-01T04:01:30Z'), 130d)
+    p.tick(Instant.parse('2022-02-01T04:02:00Z'))
+    
+    then:
+    results.size() == 2
+
+    and: 
+    verifyAll(results[0]) {
+      openTimestamp == Instant.parse('2022-02-01T04:00:00Z')
+      closeTimestamp == Instant.parse('2022-02-01T04:01:00Z')
+      openPrice == Price.of(10d)
+      highPrice == Price.of(50d)
+      lowPrice == Price.of(10d)
+      closingPrice == Price.of(50d)
+      amount == 3
+    }
+
+    and:
+    verifyAll(results[1]) {
+      openTimestamp == Instant.parse('2022-02-01T04:01:00Z')
+      closeTimestamp == Instant.parse('2022-02-01T04:02:00Z')
+      openPrice == Price.of(130d)
+      highPrice == Price.of(130d)
+      lowPrice == Price.of(130d)
+      closingPrice == Price.of(130d)
+      amount == 1
+    }
+  }
+  
   def 'test process'() {
     given:
     def handler = Mock(Consumer) as Consumer<Candlestick>

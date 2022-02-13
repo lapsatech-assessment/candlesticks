@@ -17,9 +17,9 @@ QuoteEvent stream only has implemented as of now.
 
 QuoteEvent stream generates price quotes the follwing instruments:
 
-- EURUSD 1 quote per 1se starting from 1
-- EURRUB 1 quote per 5sec starting from 1
-- USDRUB 1 quote per 10sec starting from 1
+- EURUSD 1 quote per 1 sec starting from 1
+- EURRUB 1 quote per 5 sec starting from 1
+- USDRUB 1 quote per 10 sec starting from 1
 
 Endpoint addresess as follows:
 

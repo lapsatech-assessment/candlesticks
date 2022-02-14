@@ -12,19 +12,23 @@ mvn install
 java -jar candlesticks-stub-quotes-server/target/candlesticks-stub-quotes-server-CURRENT-SNAPSHOT-verticle.jar
 ```
 
-This service raises up two websocket endpoints one for QuoteEvent and the second one for InstrumentEvent. 
-QuoteEvent stream only has implemented as of now.
+This service raises up two websocket endpoints
 
-QuoteEvent stream generates price quotes the follwing instruments:
+### QuoteEvent stream
 
-- EURUSD 1 quote per 1 sec starting from 1
-- EURRUB 1 quote per 5 sec starting from 1
-- USDRUB 1 quote per 10 sec starting from 1
+Endpoint address ``ws://localhost:8032/quotes``
 
-Endpoint addresess as follows:
+Generates price quotes as number sequence starting from '1' for the following instruments and frequency:
 
-- QuoteEvent stream uri ``ws://localhost:8032/quotes``
-- InstrumentEvent stream uri ``ws://localhost:8032/instruments``
+- EURUSD / 1 quote per 1 sec
+- EURRUB / 1 quote per 5 sec
+- USDRUB / 1 quote per 10 sec
+
+### InstrumentEvent stream
+
+Endpoint address ``ws://localhost:8032/instruments``
+
+Doesn't generate anything. Just a stub.
 
 ## Run candlestick service
 

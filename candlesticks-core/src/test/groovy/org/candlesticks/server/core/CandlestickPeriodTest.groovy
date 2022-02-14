@@ -1,6 +1,7 @@
 package org.candlesticks.server.core
 
 import static java.lang.Double.NaN
+import static java.time.Instant.parse
 
 import java.time.Duration
 import java.time.Instant
@@ -14,31 +15,53 @@ class CandlestickPeriodTest extends Specification {
   def 'test next generation'() {
 
     when:
-    def period = CandlestickPeriod.of(Instant.parse('2022-02-01T04:00:00Z'), Duration.ofMinutes(1));
+    def period = CandlestickPeriod.of(parse('2022-02-01T04:00:00Z'), Duration.ofMinutes(1));
 
     then:
-    period.fromInclusive == Instant.parse('2022-02-01T04:00:00Z')
-    period.toExclusive == Instant.parse('2022-02-01T04:01:00Z')
-    
+    period.fromInclusive == parse('2022-02-01T04:00:00Z')
+    period.toExclusive == parse('2022-02-01T04:01:00Z')
+
     when:
     def next = period.next()
     
     then:
     next
-    next.fromInclusive == Instant.parse('2022-02-01T04:01:00Z')
-    next.toExclusive == Instant.parse('2022-02-01T04:02:00Z')
+    next.fromInclusive == parse('2022-02-01T04:01:00Z')
+    next.toExclusive == parse('2022-02-01T04:02:00Z')
   }
 
-  def 'test inclusive'() {
+  def 'test isInstantInFuture'() {
     when:
-    def period = CandlestickPeriod.of(Instant.parse('2022-02-01T04:00:00Z'), Duration.ofMinutes(1));
+    def period = CandlestickPeriod.of(parse('2022-02-01T04:00:00Z'), Duration.ofMinutes(1));
 
     then:
-    !period.isFuture(Instant.parse('2022-02-01T03:59:59Z'))
-    !period.isFuture(Instant.parse('2022-02-01T04:00:00Z'))
-    !period.isFuture(Instant.parse('2022-02-01T04:00:59Z'))
-    period.isFuture(Instant.parse('2022-02-01T04:01:00Z'))
-    period.isFuture(Instant.parse('2022-02-01T04:01:01Z'))
-    
+    !period.isInstantInFuture(parse('2022-02-01T03:59:59Z'))
+    !period.isInstantInFuture(parse('2022-02-01T04:00:00Z'))
+    !period.isInstantInFuture(parse('2022-02-01T04:00:59Z'))
+    period.isInstantInFuture(parse('2022-02-01T04:01:00Z'))
+    period.isInstantInFuture(parse('2022-02-01T04:01:01Z'))
+  }
+
+  def 'test isInstantInPast'() {
+    when:
+    def period = CandlestickPeriod.of(parse('2022-02-01T04:00:00Z'), Duration.ofMinutes(1));
+
+    then:
+    period.isInstantInPast(parse('2022-02-01T03:59:59Z'))
+    !period.isInstantInPast(parse('2022-02-01T04:00:00Z'))
+    !period.isInstantInPast(parse('2022-02-01T04:00:59Z'))
+    !period.isInstantInPast(parse('2022-02-01T04:01:00Z'))
+  }
+
+  
+  def 'test isInstantInPeriod'() {
+    when:
+    def period = CandlestickPeriod.of(parse('2022-02-01T04:00:00Z'), Duration.ofMinutes(1));
+
+    then:
+    !period.isInstantInPeriod(parse('2022-02-01T03:59:59Z'))
+    period.isInstantInPeriod(parse('2022-02-01T04:00:00Z'))
+    period.isInstantInPeriod(parse('2022-02-01T04:00:59Z'))
+    !period.isInstantInPeriod(parse('2022-02-01T04:01:00Z'))
   }
 }

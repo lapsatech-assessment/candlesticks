@@ -25,15 +25,15 @@ public class CandlestickPeriod {
     this.toExclusive = fromInclusive.plus(duration);
   }
 
-  public boolean isFuture(Instant instant) {
+  public boolean isInstantInFuture(Instant instant) {
     return toExclusive.compareTo(instant) <= 0;
   }
 
-  public boolean isIn(Instant instant) {
-    return !isBefore(instant) && !isFuture(instant);
+  public boolean isInstantInPeriod(Instant instant) {
+    return !isInstantInPast(instant) && !isInstantInFuture(instant);
   }
 
-  public boolean isBefore(Instant instant) {
+  public boolean isInstantInPast(Instant instant) {
     return fromInclusive.isAfter(instant);
   }
 

@@ -16,6 +16,25 @@ import spock.lang.Specification
 
 class CandlestickGeneratorTest extends Specification {
 
+  def 'test generator should fall if ticked with a timestamp that is a past according to the current candlestick'() {
+    given:
+    def handler = Stub(Consumer)
+    def started = parse('2022-02-01T04:00:00Z')
+    def p = new CandlestickGenerator(started, Length.of(Duration.ofMinutes(1)), Isin.of("ABC123"), handler)
+
+    when:
+    p.tick(parse('2022-02-01T05:00:10Z'))
+
+    then:
+    noExceptionThrown()
+
+    when:
+    p.tick(parse('2022-02-01T04:59:10Z'))
+
+    then:
+    thrown(IllegalArgumentException)
+  }
+
   def 'test that all expected candlesticks are generated according to prices and timestamps'() {
     given:
     def handler = Stub(Consumer)

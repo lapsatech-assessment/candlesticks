@@ -99,17 +99,17 @@ public class CandlestickGenerator {
   private void tick(final Instant now, final double price, final boolean catchPrice) {
     CandlestickPeriod pp = this.period;
 
-    if (pp.isBefore(now)) {
-      throw new IllegalStateException("Past value");
+    if (pp.isInstantInPast(now)) {
+      throw new IllegalArgumentException("Past value");
     }
 
-    if (catchPrice || pp.isFuture(now)) {
+    if (catchPrice || pp.isInstantInFuture(now)) {
       lock.lock();
       try {
         CandlestickPeriod ppp = this.period;
         CandlestickValues vvv = this.values;
-        if (ppp.isFuture(now)) {
-          while (ppp.isFuture(now)) {
+        if (ppp.isInstantInFuture(now)) {
+          while (ppp.isInstantInFuture(now)) {
             CandlestickEvent event = createEventObject(isin, length, vvv, ppp);
             vvv = CandlestickValues.empty();
             ppp = ppp.next();

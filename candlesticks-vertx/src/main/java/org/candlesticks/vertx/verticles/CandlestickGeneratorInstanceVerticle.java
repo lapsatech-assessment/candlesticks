@@ -34,12 +34,14 @@ public class CandlestickGeneratorInstanceVerticle extends AbstractVerticle {
   public void start() {
     EventBusAccess eventBusAccess = EventBusAccess.instance();
 
-    final CandlestickGenerator generator = new CandlestickGenerator(length, isin,
-        eventBusAccess::publishCandlestickEvent);
+    final CandlestickGenerator generator = new CandlestickGenerator(length, isin);
 
-    eventBusAccess.registerPriceStub(isin, price -> generator.tick(price.getValue()));
+    eventBusAccess.registerPriceStub(isin,
+        price -> generator.tick(price.getValue())
+            .forEach(eventBusAccess::publishCandlestickEvent));
 
-    vertx.setPeriodic(generator.getTickerDelayMilis(), timerId -> generator.tick());
+    vertx.setPeriodic(generator.getTickerDelayMilis(),
+        timerId -> generator.tick().forEach(eventBusAccess::publishCandlestickEvent));
 
     LOGGER.info("Started streaming candlesticks {}/{}", isin, length);
   }

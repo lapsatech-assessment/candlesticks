@@ -38,12 +38,12 @@ public class CandlestickValues {
     this.amount = 0;
   }
 
-  public CandlestickValues acceptPrice(double priceValue) {
+  public CandlestickValues acceptPrice(double newPrice) {
     return new CandlestickValues(
-        empty ? priceValue : openPrice,
-        empty || highPrice < priceValue ? priceValue : highPrice,
-        empty || lowPrice > priceValue ? priceValue : lowPrice,
-        priceValue,
+        empty ? newPrice : openPrice,
+        empty || newPrice > highPrice ? newPrice : highPrice,
+        empty || newPrice < lowPrice ? newPrice : lowPrice,
+        newPrice,
         amount + 1);
   }
 

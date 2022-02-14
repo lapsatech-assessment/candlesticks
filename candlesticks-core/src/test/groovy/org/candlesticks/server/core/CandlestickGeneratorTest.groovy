@@ -4,10 +4,8 @@ import static java.time.Instant.parse
 import static org.candlesticks.model.Price.of
 
 import java.time.Duration
-import java.util.function.Consumer
 
 import org.candlesticks.core.CandlestickGenerator
-import org.candlesticks.model.Candlestick
 import org.candlesticks.model.CandlestickEvent
 import org.candlesticks.model.Isin
 import org.candlesticks.model.Length
@@ -18,9 +16,8 @@ class CandlestickGeneratorTest extends Specification {
 
   def 'test generator should fall if ticked with a timestamp that is a past according to the current candlestick'() {
     given:
-    def handler = Stub(Consumer)
     def started = parse('2022-02-01T04:00:00Z')
-    def p = new CandlestickGenerator(started, Length.of(Duration.ofMinutes(1)), Isin.of("ABC123"), handler)
+    def p = new CandlestickGenerator(started, Length.of(Duration.ofMinutes(1)), Isin.of("ABC123"))
 
     when:
     p.tick(parse('2022-02-01T05:00:10Z'))
@@ -37,24 +34,22 @@ class CandlestickGeneratorTest extends Specification {
 
   def 'test that all expected candlesticks are generated according to prices and timestamps'() {
     given:
-    def handler = Stub(Consumer)
     def results = [] as List<CandlestickEvent>
-    handler.accept(_) >>  { results << it[0] }
-    
+
     def length = Length.of(Duration.ofMinutes(1))
     def isin = Isin.of("ABC123")
     def started = parse('2022-02-01T03:59:00Z')
-    
-    def p = new CandlestickGenerator(started, length, isin, handler)
+
+    def p = new CandlestickGenerator(started, length, isin)
 
     when:
-    p.tick(parse('2022-02-01T04:00:10Z'), 10d)
-    p.tick(parse('2022-02-01T04:00:30Z'), 30d)
-    p.tick(parse('2022-02-01T04:00:50Z'), 50d)
-    p.tick(parse('2022-02-01T04:01:10Z'))
-    p.tick(parse('2022-02-01T04:01:30Z'), 130d)
-    p.tick(parse('2022-02-01T04:02:00Z'))
-    p.tick(parse('2022-02-01T04:04:00Z'))
+    results.addAll(p.tick(parse('2022-02-01T04:00:10Z'), 10d))
+    results.addAll(p.tick(parse('2022-02-01T04:00:30Z'), 30d))
+    results.addAll(p.tick(parse('2022-02-01T04:00:50Z'), 50d))
+    results.addAll(p.tick(parse('2022-02-01T04:01:10Z')))
+    results.addAll(p.tick(parse('2022-02-01T04:01:30Z'), 130d))
+    results.addAll(p.tick(parse('2022-02-01T04:02:00Z')))
+    results.addAll(p.tick(parse('2022-02-01T04:04:00Z')))
 
     then:
     results
@@ -64,7 +59,7 @@ class CandlestickGeneratorTest extends Specification {
     results.each {
       assert it.isin == isin
       assert it.length == length
-    } 
+    }
 
     and:
     verifyAll(results.pop().candlestick) {

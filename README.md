@@ -103,7 +103,7 @@ or
 curl --location --request GET 'http://localhost:9090/api/candlesticks/EURUSD/PT20S/'
 ```
 
-Candlesticks older than 5 minutes (by closing timestamp) are being trunccated from the cache.
+Candlesticks older than ``5 minutes`` (by closing timestamp) are being truncated from the cache.
 
 #### WebSocket endpoint for streaming candlesticks
 

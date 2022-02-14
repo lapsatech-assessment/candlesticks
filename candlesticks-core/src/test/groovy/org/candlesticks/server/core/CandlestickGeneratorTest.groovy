@@ -24,8 +24,9 @@ class CandlestickGeneratorTest extends Specification {
     
     def length = Length.of(Duration.ofMinutes(1))
     def isin = Isin.of("ABC123")
+    def started = parse('2022-02-01T03:59:00Z')
     
-    def p = new CandlestickGenerator(parse('2022-02-01T04:00:00Z'), length, isin, handler)
+    def p = new CandlestickGenerator(started, length, isin, handler)
 
     when:
     p.tick(parse('2022-02-01T04:00:10Z'), 10d)
@@ -38,16 +39,27 @@ class CandlestickGeneratorTest extends Specification {
 
     then:
     results
-    results.size() == 4
+    results.size() == 5
 
     and:
-    results.forEach {
+    results.each {
       assert it.isin == isin
       assert it.length == length
     } 
 
     and:
-    verifyAll(results[0].candlestick) {
+    verifyAll(results.pop().candlestick) {
+      openTimestamp == started
+      closeTimestamp == parse('2022-02-01T04:00:00Z')
+      !openPrice
+      !highPrice
+      !lowPrice
+      !closingPrice
+      amount == 0
+    }
+
+    and:
+    verifyAll(results.pop().candlestick) {
       openTimestamp == parse('2022-02-01T04:00:00Z')
       closeTimestamp == parse('2022-02-01T04:01:00Z')
       openPrice == of(10d)
@@ -58,7 +70,7 @@ class CandlestickGeneratorTest extends Specification {
     }
 
     and:
-    verifyAll(results[1].candlestick) {
+    verifyAll(results.pop().candlestick) {
       openTimestamp == parse('2022-02-01T04:01:00Z')
       closeTimestamp == parse('2022-02-01T04:02:00Z')
       openPrice == of(130d)
@@ -69,7 +81,7 @@ class CandlestickGeneratorTest extends Specification {
     }
 
     and:
-    verifyAll(results[2].candlestick) {
+    verifyAll(results.pop().candlestick) {
       openTimestamp == parse('2022-02-01T04:02:00Z')
       closeTimestamp == parse('2022-02-01T04:03:00Z')
       !openPrice
@@ -80,7 +92,7 @@ class CandlestickGeneratorTest extends Specification {
     }
 
     and:
-    verifyAll(results[3].candlestick) {
+    verifyAll(results.pop().candlestick) {
       openTimestamp == parse('2022-02-01T04:03:00Z')
       closeTimestamp == parse('2022-02-01T04:04:00Z')
       !openPrice

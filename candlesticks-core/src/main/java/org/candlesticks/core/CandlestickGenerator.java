@@ -3,8 +3,10 @@ package org.candlesticks.core;
 import static java.util.Objects.requireNonNull;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.Consumer;
 
 import org.candlesticks.model.Candlestick;
 import org.candlesticks.model.CandlestickEvent;
@@ -17,39 +19,32 @@ public class CandlestickGenerator {
   private final ReentrantLock lock = new ReentrantLock();
   private final Length length;
   private final Isin isin;
-  private final Consumer<CandlestickEvent> eventCallback;
 
   private volatile CandlestickValues values;
   private volatile CandlestickPeriod period;
 
-  public CandlestickGenerator(
-      Length length,
-      Isin isin,
-      Consumer<CandlestickEvent> eventCallback) {
-    this(Instant.now(), length, isin, eventCallback);
+  public CandlestickGenerator(Length length, Isin isin) {
+    this(Instant.now(), length, isin);
   }
 
-  public CandlestickGenerator(
-      Instant startFromInclusive,
-      Length length,
-      Isin isin,
-      Consumer<CandlestickEvent> eventCallback) {
-
+  /*
+   * used in tests
+   */
+  CandlestickGenerator(Instant startFromInclusive, Length length, Isin isin) {
     this.length = requireNonNull(length, "length");
     this.isin = requireNonNull(isin, "isin");
-    this.eventCallback = requireNonNull(eventCallback, "eventCallback");
 
     this.values = CandlestickValues.empty();
     this.period = CandlestickPeriod.of(requireNonNull(startFromInclusive, "startFromInclusive"),
         requireNonNull(length, "length").getValue());
   }
 
-  public void tick(double price) {
-    dotick(Instant.now(), price, true);
+  public List<CandlestickEvent> tick(double price) {
+    return dotick(Instant.now(), price, true);
   }
 
-  public void tick() {
-    dotick(Instant.now(), 0, false);
+  public List<CandlestickEvent> tick() {
+    return dotick(Instant.now(), 0, false);
   }
 
   public long getTickerDelayMilis() {
@@ -85,18 +80,7 @@ public class CandlestickGenerator {
     return new CandlestickEvent(candlestick, isin, length);
   }
 
-  /*
-   * used in tests
-   */
-  void tick(final Instant now, final double price) {
-    dotick(now, price, true);
-  }
-
-  void tick(final Instant now) {
-    dotick(now, 0, false);
-  }
-
-  private void dotick(final Instant now, final double price, final boolean catchPrice) {
+  private List<CandlestickEvent> dotick(final Instant now, final double price, final boolean catchPrice) {
     CandlestickPeriod pp = this.period;
 
     if (pp.isInstantInPast(now)) {
@@ -104,16 +88,16 @@ public class CandlestickGenerator {
     }
 
     if (catchPrice || pp.isInstantInFuture(now)) {
+      List<CandlestickEvent> res = new ArrayList<>();
       lock.lock();
       try {
         CandlestickPeriod ppp = this.period;
         CandlestickValues vvv = this.values;
         if (ppp.isInstantInFuture(now)) {
           while (ppp.isInstantInFuture(now)) {
-            CandlestickEvent event = createEventObject(isin, length, vvv, ppp);
+            res.add(createEventObject(isin, length, vvv, ppp));
             vvv = CandlestickValues.empty();
             ppp = ppp.next();
-            eventCallback.accept(event);
           }
           this.period = ppp;
         }
@@ -124,6 +108,21 @@ public class CandlestickGenerator {
       } finally {
         lock.unlock();
       }
+      return res;
+    } else {
+      return Collections.emptyList();
     }
   }
+
+  /*
+   * used in tests
+   */
+  List<CandlestickEvent> tick(final Instant now, final double price) {
+    return dotick(now, price, true);
+  }
+
+  List<CandlestickEvent> tick(final Instant now) {
+    return dotick(now, 0, false);
+  }
+
 }

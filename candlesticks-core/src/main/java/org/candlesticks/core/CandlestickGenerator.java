@@ -45,11 +45,11 @@ public class CandlestickGenerator {
   }
 
   public void tick(double price) {
-    tick(Instant.now(), price);
+    dotick(Instant.now(), price, true);
   }
 
   public void tick() {
-    tick(Instant.now(), 0, false);
+    dotick(Instant.now(), 0, false);
   }
 
   public long getTickerDelayMilis() {
@@ -89,14 +89,14 @@ public class CandlestickGenerator {
    * used in tests
    */
   void tick(final Instant now, final double price) {
-    tick(now, price, true);
+    dotick(now, price, true);
   }
 
   void tick(final Instant now) {
-    tick(now, 0, false);
+    dotick(now, 0, false);
   }
 
-  private void tick(final Instant now, final double price, final boolean catchPrice) {
+  private void dotick(final Instant now, final double price, final boolean catchPrice) {
     CandlestickPeriod pp = this.period;
 
     if (pp.isInstantInPast(now)) {

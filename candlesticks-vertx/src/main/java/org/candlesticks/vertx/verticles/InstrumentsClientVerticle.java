@@ -2,7 +2,7 @@ package org.candlesticks.vertx.verticles;
 
 import static java.util.Objects.requireNonNull;
 
-import org.candlesticks.model.QuoteEvent;
+import org.candlesticks.model.InstrumentEvent;
 import org.candlesticks.vertx.service.EventBusAccess;
 
 import io.vertx.core.http.HttpClientOptions;
@@ -49,7 +49,9 @@ public class InstrumentsClientVerticle extends WebSocketClientAbstractVerticle {
 
   @Override
   protected void handleConnection(WebSocket webSocket) {
-    webSocket.textMessageHandler(
-        text -> EventBusAccess.instance().publishQuoteEvent(Json.decodeValue(text, QuoteEvent.class)));
+    webSocket
+        .textMessageHandler(
+            text -> EventBusAccess.instance()
+                .publishInstrumentsEvent(Json.decodeValue(text, InstrumentEvent.class)));
   }
 }

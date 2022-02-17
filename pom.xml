@@ -3,7 +3,7 @@
 
   <groupId>org.traderepublic.candlesticks</groupId>
   <artifactId>candlesticks</artifactId>
-  <version>CURRENT-SNAPSHOT</version>
+  <version>0.0.1-beta1</version>
   <packaging>pom</packaging>
 
   <modules>
@@ -13,7 +13,7 @@
   </modules>
 
   <scm>
-    <tag>HEAD</tag>
+    <tag>v0.0.1-beta1</tag>
   </scm>
 
   <properties>

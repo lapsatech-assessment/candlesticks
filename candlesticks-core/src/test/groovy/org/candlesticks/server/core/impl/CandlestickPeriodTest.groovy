@@ -1,4 +1,4 @@
-package org.candlesticks.server.core
+package org.candlesticks.server.core.impl
 
 import static java.lang.Double.NaN
 import static java.time.Instant.parse
@@ -6,7 +6,7 @@ import static java.time.Instant.parse
 import java.time.Duration
 import java.time.Instant
 
-import org.candlesticks.core.CandlestickPeriod
+import org.candlesticks.core.impl.CandlestickPeriod
 
 import spock.lang.Specification
 

@@ -87,7 +87,7 @@ public class HttpServerVerticle extends AbstractVerticle {
         .webSocketHandler(configureWebSocketRouter())
         .listen(9090)
         .onComplete(HttpServerListenResultLoggingHandler.create(LOGGER))
-        .onSuccess(srv -> startPromise.complete())
-        .onFailure(startPromise::fail);
+        .<Void>mapEmpty()
+        .onComplete(startPromise);
   }
 }

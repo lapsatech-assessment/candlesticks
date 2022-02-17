@@ -1,4 +1,4 @@
-package org.candlesticks.core;
+package org.candlesticks.core.impl;
 
 public class CandlestickValues {
 

@@ -1,6 +1,6 @@
-package org.candlesticks.server.core
+package org.candlesticks.server.core.impl
 
-import org.candlesticks.core.CandlestickValues
+import org.candlesticks.core.impl.CandlestickValues
 
 import spock.lang.Specification
 

@@ -1,23 +1,23 @@
-package org.candlesticks.server.core
+package org.candlesticks.server.core.impl
 
 import static java.time.Instant.parse
 import static org.candlesticks.model.Price.of
 
 import java.time.Duration
 
-import org.candlesticks.core.CandlestickGenerator
+import org.candlesticks.core.impl.CandlestickGeneratorImpl
 import org.candlesticks.model.CandlestickEvent
 import org.candlesticks.model.Isin
 import org.candlesticks.model.Length
 
 import spock.lang.Specification
 
-class CandlestickGeneratorTest extends Specification {
+class CandlestickGeneratorImplTest extends Specification {
 
   def 'test generator should fall if ticked with a timestamp that is a past according to the current candlestick'() {
     given:
     def started = parse('2022-02-01T04:00:00Z')
-    def p = new CandlestickGenerator(started, Length.of(Duration.ofMinutes(1)), Isin.of("ABC123"))
+    def p = new CandlestickGeneratorImpl(started, Length.of(Duration.ofMinutes(1)), Isin.of("ABC123"))
 
     when:
     p.tick(parse('2022-02-01T05:00:10Z'))
@@ -40,7 +40,7 @@ class CandlestickGeneratorTest extends Specification {
     def isin = Isin.of("ABC123")
     def started = parse('2022-02-01T03:59:00Z')
 
-    def p = new CandlestickGenerator(started, length, isin)
+    def p = new CandlestickGeneratorImpl(started, length, isin)
 
     when:
     results.addAll(p.tick(parse('2022-02-01T04:00:10Z'), 10d))

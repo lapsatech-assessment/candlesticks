@@ -48,7 +48,9 @@ public class QuotesClientVerticle extends WebSocketClientAbstractVerticle {
 
   @Override
   protected void handleConnection(WebSocket webSocket) {
-    webSocket.textMessageHandler(
-        text -> EventBusAccess.instance().publishQuoteEvent(Json.decodeValue(text, QuoteEvent.class)));
+    webSocket
+        .textMessageHandler(
+            text -> EventBusAccess.instance()
+                .publishQuoteEvent(Json.decodeValue(text, QuoteEvent.class)));
   }
 }

@@ -6,7 +6,7 @@
 mvn install
 ```
 
-## Start dummy quotes generator
+## Dummy quotes generator
 
 ```
 java -jar candlesticks-stub-quotes-server/target/candlesticks-stub-quotes-server-CURRENT-SNAPSHOT-verticle.jar
@@ -30,7 +30,7 @@ Endpoint address ``ws://localhost:8032/instruments``
 
 Doesn't generate anything. Just a stub.
 
-## Run candlestick service
+## Candlestick service
 
 ```
 java -jar candlesticks-vertx/target/candlesticks-vertx-CURRENT-SNAPSHOT-verticle.jar
